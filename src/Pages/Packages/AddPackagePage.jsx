@@ -1,0 +1,293 @@
+import { Checkbox, Form, Input, Select } from "antd";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllVehicles } from "../../store/Vehicles/VehicleSlice";
+import { IMAGE_BASE_URL } from "../../Const/ApiConst";
+import { Button } from "react-bootstrap";
+import { NEW_PACKAGE_SLICE_ITEM } from "../../store/Packages/PackageSlice";
+import { useNavigate } from "react-router-dom";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { FaCloudUploadAlt } from "react-icons/fa";
+
+function AddPackagePage() {
+  const [PackageName, setPackageName] = useState("");
+  const [TourLength, setTourLength] = useState(0);
+  const [TotalPerson, setTotalPerson] = useState(0);
+  const [selectedStatus, setSelectedStatus] = useState("Visible");
+  const [Description, setDescription] = useState("");
+  const [eventType, setEventType] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
+  const [vehiclePrices, setVehiclePrices] = useState({});
+  const [imges, setImges] = useState([]);
+  const [imagesPreviews, setImagePreviews] = useState([]);
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    if (e.target.checked) {
+      setEventType([...eventType, value]);
+    } else {
+      setEventType(eventType.filter((item) => item !== value));
+    }
+  };
+
+  const handlePriceChange = (e, vehicleId) => {
+    const price = e.target.value;
+    setVehiclePrices({ ...vehiclePrices, [vehicleId]: price });
+  };
+
+  const handleChangeVehicle = (e, vehicle) => {
+    const { checked } = e.target;
+    const price = vehiclePrices[vehicle._id] || "";
+
+    if (checked) {
+      setVehicles([
+        ...vehicles,
+        { id: vehicle._id, name: vehicle.vehicleName, price },
+      ]);
+    } else {
+      setVehicles(vehicles.filter((item) => item.id !== vehicle._id));
+    }
+  };
+
+  const { allVehicleList } = useSelector((state) => state.vehicle);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getAllVehicles());
+  }, [dispatch]);
+
+  const uploadImage = (e) => {
+    const selectedFiles = e.target.files;
+    const selectedPreviews = Array.from(selectedFiles).map((file) =>
+      URL.createObjectURL(file)
+    );
+    setImges([...imges, ...selectedFiles]);
+    setImagePreviews([...imagesPreviews, ...selectedPreviews]);
+  };
+  const deleteImageAction = (i) => {
+    const updatedFilesPreview = imagesPreviews
+      .slice(0, i)
+      .concat(imagesPreviews.slice(i + 1));
+    const updatedFiles = imges.slice(0, i).concat(imges.slice(i + 1));
+    setImges(updatedFiles);
+    setImagePreviews(updatedFilesPreview);
+  };
+  const saveNewPackage = () => {
+    const formData = new FormData();
+    for (let i = 0; i < imges.length; i++) {
+      formData.append("images", imges[i]);
+    }
+    formData.append("PackageName", PackageName);
+    formData.append("TourLength", TourLength);
+    formData.append("TotalPerson", TotalPerson);
+    formData.append("selectedStatus", selectedStatus);
+    formData.append("Description", Description);
+    formData.append("eventType", eventType);
+    formData.append("vehicles", JSON.stringify(vehicles));
+    formData.append("vehiclePrices", JSON.stringify(vehiclePrices));
+
+    // const data = {
+    //   PackageName,
+    //   TourLength,
+    //   TotalPerson,
+    //   selectedStatus,
+    //   Description,
+    //   eventType,
+    //   vehicles,
+    //   vehiclePrices,
+    // };
+
+    dispatch(NEW_PACKAGE_SLICE_ITEM(formData));
+    navigate("/packages");
+  };
+  const vehicleImagePreviewContainer = {
+    position: "relative",
+    margin: "10px",
+    border: "2px solid white",
+    padding: "2px",
+    borderRadius: "5px",
+    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+  };
+
+  const vehicleImagePreview = {
+    height: "100px",
+  };
+
+  return (
+    <div>
+      <div className="row mb-3 ">
+        <div className="col-12 col-md-6">
+          <label className="text-secondary">Package Name</label>
+          <Input
+            value={PackageName}
+            onChange={(e) => setPackageName(e.target.value)}
+          />
+        </div>
+        <div className="col-12 col-md-6">
+          <label>Package Image</label>
+          <div className="d-flex align-items-center flex-wrap">
+            {imagesPreviews.map((res, i) => (
+              <div style={vehicleImagePreviewContainer} key={i}>
+                <CancelIcon
+                  color="error"
+                  style={{
+                    position: "absolute",
+                    right: "-5px",
+                    top: "-5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={(e) => deleteImageAction(i)}
+                />
+
+                {/* {console.log(res.FileList)} */}
+                <img src={res} alt="" style={vehicleImagePreview} />
+              </div>
+            ))}
+            <div className="upload-button-container">
+              <input
+                type="file"
+                multiple
+                style={{
+                  opacity: 1,
+                }}
+                className="upload-input"
+                accept="image/*"
+                onChange={uploadImage}
+              />
+              <FaCloudUploadAlt
+                style={{ fontSize: "60px", color: "#808080" }}
+              />
+              <strong>Drag & Drop or Browse file</strong>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-12 col-md-6 mt-4">
+          <label className="text-secondary">Tour Length</label>
+          <Input
+            value={TourLength}
+            onChange={(e) => setTourLength(e.target.value)}
+          />
+        </div>
+        <div className="col-12 col-md-6 mt-4">
+          <label className="text-secondary">Total Person</label>
+          <Input
+            value={TotalPerson}
+            onChange={(e) => setTotalPerson(e.target.value)}
+          />
+        </div>
+      </div>
+      <div className="row mb-3">
+        <div className=" col-12 col-md-6 d-flex flex-column ">
+          <label className="text-secondary">Status</label>
+          <Select
+            value={selectedStatus}
+            options={[
+              { value: "Visible", label: "Visible" },
+              { value: "Hidden", label: "Hidden" },
+            ]}
+            onChange={(value) => setSelectedStatus(value)}
+          />
+        </div>
+        <div className="col-12 col-md-6">
+          <label className="text-secondary">Small Description</label>
+          <Input.TextArea
+            value={Description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+      </div>
+      <div>
+        <label className="text-secondary">Choose Event</label>
+        <div className="row">
+          <div className="col-12 col-md-4">
+            <Checkbox value="Half Day Tour" onChange={handleChange}>
+              Half Day Tour
+            </Checkbox>
+          </div>
+          <div className="col-12 col-md-4">
+            <Checkbox value="Full Day Tour" onChange={handleChange}>
+              Full Day Tour
+            </Checkbox>
+          </div>
+          <div className="col-12 col-md-4">
+            <Checkbox value="Birthday/Quincera" onChange={handleChange}>
+              Birthday/Quincera
+            </Checkbox>
+          </div>
+          <div className="col-12 col-md-4">
+            <Checkbox
+              value="Wedding Shuttle & Wedding Send-off"
+              onChange={handleChange}
+            >
+              Wedding Shuttle & Wedding Send-off
+            </Checkbox>
+          </div>
+          <div className="col-12 col-md-4">
+            <Checkbox value="Concerts" onChange={handleChange}>
+              Concerts
+            </Checkbox>
+          </div>
+          <div className="col-12 col-md-4">
+            <Checkbox value="Sporting Events" onChange={handleChange}>
+              Sporting Events
+            </Checkbox>
+          </div>
+          <div className="col-12 col-md-4">
+            <Checkbox value="Day Night" onChange={handleChange}>
+              Day Night
+            </Checkbox>
+          </div>
+          <div className="col-12 col-md-4">
+            <Checkbox value="Wine Tasting" onChange={handleChange}>
+              Wine Tasting
+            </Checkbox>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label className="text-secondary">Choose Vehicle</label>
+        <div className="d-flex flex-wrap gap-4">
+          {allVehicleList.map((res, i) => (
+            <div key={i} className="vehicle-checkbox">
+              <Checkbox
+                onChange={(e) => handleChangeVehicle(e, res)}
+                value={res._id}
+              >
+                <div>
+                  <strong>{res.vehicleName}</strong>
+                </div>
+                <img
+                  src={`${IMAGE_BASE_URL}${res.images[0]}`}
+                  alt=""
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    objectFit: "contain",
+                  }}
+                />
+                <div className="mt-2">
+                  <Input
+                    placeholder="Price"
+                    value={vehiclePrices[res._id] || ""}
+                    onChange={(e) => handlePriceChange(e, res._id)}
+                  />
+                </div>
+              </Checkbox>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="text-center mt-4">
+        <Button style={{ width: "200px" }} onClick={saveNewPackage}>
+          Save
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+export default AddPackagePage;
