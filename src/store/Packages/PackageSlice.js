@@ -3,6 +3,7 @@ import packageService from "./PackagesService";
 
 const initialState = {
   packageList: [],
+  singlePackageItem: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -22,6 +23,26 @@ export const NEW_PACKAGE_SLICE_ITEM = createAsyncThunk(
   async (data, thunkApi) => {
     try {
       return await packageService.newPackages(data);
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+export const TOGGLE_PACKAGE_STATUS_SLICE_ITEM = createAsyncThunk(
+  "toggle-status-packages",
+  async (data, thunkApi) => {
+    try {
+      return await packageService.toggleStatus(data);
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+export const GET_SINGLE_PACKAGE_SLICE_ITEM = createAsyncThunk(
+  "get-single-packages",
+  async (data, thunkApi) => {
+    try {
+      return await packageService.getSinglePackage(data);
     } catch (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -65,6 +86,38 @@ export const packageSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.packageList = action.payload;
+      })
+      .addCase(TOGGLE_PACKAGE_STATUS_SLICE_ITEM.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+      })
+      .addCase(TOGGLE_PACKAGE_STATUS_SLICE_ITEM.rejected, (state) => {
+        state.isLoading = true;
+        state.isError = true;
+        state.isSuccess = false;
+      })
+      .addCase(TOGGLE_PACKAGE_STATUS_SLICE_ITEM.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.packageList = action.payload;
+      })
+      .addCase(GET_SINGLE_PACKAGE_SLICE_ITEM.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+      })
+      .addCase(GET_SINGLE_PACKAGE_SLICE_ITEM.rejected, (state) => {
+        state.isLoading = true;
+        state.isError = true;
+        state.isSuccess = false;
+      })
+      .addCase(GET_SINGLE_PACKAGE_SLICE_ITEM.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.singlePackageItem = action.payload;
       });
   },
 });

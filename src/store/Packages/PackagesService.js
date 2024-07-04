@@ -11,9 +11,21 @@ const newPackages = async (data) => {
   return response.data;
 };
 
+const toggleStatus = async (data) => {
+  const response = await instance.post(`${PACKAGES_URL}/toggle-status`, data);
+  return response.data;
+};
+
+const getSinglePackage = async (data) => {
+  const response = await instance.post(`${PACKAGES_URL}/get-single`, data);
+  return response.data;
+};
+
 const packageService = {
   getAllPackages,
   newPackages,
+  toggleStatus,
+  getSinglePackage,
 };
 
 export default packageService;

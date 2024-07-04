@@ -84,6 +84,7 @@ function App() {
             <Route path="/view-trip/:id" element={<ViewTripT />} />
             <Route path="/packages" element={<PackagesPage />} />
             <Route path="/packages/add_package" element={<AddPackagePage />} />
+            <Route path="/packages/:id" element={<AddPackagePage />} />
           </Routes>
         </main>
       </>

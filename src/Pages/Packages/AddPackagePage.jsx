@@ -1,11 +1,14 @@
 import { Checkbox, Form, Input, Select } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllVehicles } from "../../store/Vehicles/VehicleSlice";
 import { IMAGE_BASE_URL } from "../../Const/ApiConst";
 import { Button } from "react-bootstrap";
-import { NEW_PACKAGE_SLICE_ITEM } from "../../store/Packages/PackageSlice";
-import { useNavigate } from "react-router-dom";
+import {
+  GET_SINGLE_PACKAGE_SLICE_ITEM,
+  NEW_PACKAGE_SLICE_ITEM,
+} from "../../store/Packages/PackageSlice";
+import { useNavigate, useParams } from "react-router-dom";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
@@ -49,10 +52,32 @@ function AddPackagePage() {
     }
   };
 
-  const { allVehicleList } = useSelector((state) => state.vehicle);
+  const { allVehicleList } = useSelector((state) => state?.vehicle);
+  const { singlePackageItem } = useSelector((state) => state?.packages);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      const data = {
+        id: id,
+      };
+      dispatch(GET_SINGLE_PACKAGE_SLICE_ITEM(data)).then((res) => {
+        // singlePackageItem;
+
+        if (res.type === "get-single-packages/fulfilled") {
+          setPackageName(res.payload[0]?.PackageName);
+          setTotalPerson(res.payload[0]?.TotalPerson);
+          setTourLength(res.payload[0]?.TourLength);
+          setDescription(res.payload[0]?.Description);
+          setVehicles(res.payload[0]?.vehicles);
+          setEventType(res.payload[0]?.eventType);
+        }
+      });
+    }
+  }, []);
 
   useEffect(() => {
     dispatch(getAllVehicles());
@@ -141,7 +166,6 @@ function AddPackagePage() {
                   onClick={(e) => deleteImageAction(i)}
                 />
 
-                {/* {console.log(res.FileList)} */}
                 <img src={res} alt="" style={vehicleImagePreview} />
               </div>
             ))}
@@ -203,45 +227,74 @@ function AddPackagePage() {
         <label className="text-secondary">Choose Event</label>
         <div className="row">
           <div className="col-12 col-md-4">
-            <Checkbox value="Half Day Tour" onChange={handleChange}>
+            <Checkbox
+              value="Half Day Tour"
+              checked={eventType.includes("Half Day Tour")}
+              onChange={handleChange}
+            >
               Half Day Tour
             </Checkbox>
           </div>
           <div className="col-12 col-md-4">
-            <Checkbox value="Full Day Tour" onChange={handleChange}>
+            <Checkbox
+              value="Full Day Tour"
+              checked={eventType.includes("Full Day Tour")}
+              onChange={handleChange}
+            >
               Full Day Tour
             </Checkbox>
           </div>
           <div className="col-12 col-md-4">
-            <Checkbox value="Birthday/Quincera" onChange={handleChange}>
+            <Checkbox
+              value="Birthday/Quincera"
+              checked={eventType.includes("Birthday/Quincera")}
+              onChange={handleChange}
+            >
               Birthday/Quincera
             </Checkbox>
           </div>
           <div className="col-12 col-md-4">
             <Checkbox
               value="Wedding Shuttle & Wedding Send-off"
+              checked={eventType.includes("Wedding Shuttle & Wedding Send-off")}
               onChange={handleChange}
             >
               Wedding Shuttle & Wedding Send-off
             </Checkbox>
           </div>
           <div className="col-12 col-md-4">
-            <Checkbox value="Concerts" onChange={handleChange}>
+            <Checkbox
+              value="Concerts"
+              checked={eventType.includes("Concerts")}
+              onChange={handleChange}
+            >
               Concerts
             </Checkbox>
           </div>
           <div className="col-12 col-md-4">
-            <Checkbox value="Sporting Events" onChange={handleChange}>
+            <Checkbox
+              value="Sporting Events"
+              checked={eventType.includes("Sporting Events")}
+              onChange={handleChange}
+            >
               Sporting Events
             </Checkbox>
           </div>
           <div className="col-12 col-md-4">
-            <Checkbox value="Day Night" onChange={handleChange}>
+            <Checkbox
+              value="Day Night"
+              checked={eventType.includes("Day Night")}
+              onChange={handleChange}
+            >
               Day Night
             </Checkbox>
           </div>
           <div className="col-12 col-md-4">
-            <Checkbox value="Wine Tasting" onChange={handleChange}>
+            <Checkbox
+              value="Wine Tasting"
+              checked={eventType.includes("Wine Tasting")}
+              onChange={handleChange}
+            >
               Wine Tasting
             </Checkbox>
           </div>
@@ -253,7 +306,10 @@ function AddPackagePage() {
           {allVehicleList.map((res, i) => (
             <div key={i} className="vehicle-checkbox">
               <Checkbox
-                onChange={(e) => handleChangeVehicle(e, res)}
+                checked={vehicles.some((vehicle) => vehicle.id === res._id)}
+                onChange={(e) => {
+                  handleChangeVehicle(e, res);
+                }}
                 value={res._id}
               >
                 <div>
@@ -270,6 +326,7 @@ function AddPackagePage() {
                 />
                 <div className="mt-2">
                   <Input
+                    type="number"
                     placeholder="Price"
                     value={vehiclePrices[res._id] || ""}
                     onChange={(e) => handlePriceChange(e, res._id)}
