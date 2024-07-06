@@ -16,12 +16,11 @@ import {
   MenuItem,
 } from "@mui/material";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import SettingsIcon from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { instance } from "../Const/ApiHeader";
 import { GET_NOTIFICATIONS } from "../Const/ApiConst";
 import logo from "../Imges/Asset 2.png";
-import { IoMdMenu } from "react-icons/io";
+import { IoMdMenu, IoMdSettings } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { toggleMenuState } from "../store/SideMenu/SideMenuState";
 import { useSelector } from "react-redux";
@@ -231,7 +230,7 @@ function Sidebar() {
         style={{
           display:
             window.innerWidth > 700 ? "bloc" : menuState ? "block" : "none",
-          zIndex: 99999,
+          zIndex: 99,
         }}
         onClick={() => {
           dispatch(toggleMenuState(false));
@@ -401,6 +400,24 @@ function Sidebar() {
               >
                 <MdCardTravel size={30} />
                 <div>Packages</div>
+              </NavLink>
+            </Ripple>
+          </li>
+          <li>
+            <Ripple
+              className="menuItemContainer"
+              onClick={() => {
+                dispatch(toggleMenuState(false));
+              }}
+            >
+              <NavLink
+                to="/settings"
+                className={({ isActive }) =>
+                  isActive ? "menuItem menuItem-active" : "menuItem"
+                }
+              >
+                <IoMdSettings size={30} />
+                <div>Price & Distance Settings</div>
               </NavLink>
             </Ripple>
           </li>

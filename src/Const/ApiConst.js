@@ -32,6 +32,10 @@ export const DELETE_VEHICLE_IMAGE = `${BACKEND_BASE_URL}/api/vehicles/delete_ima
 export const UPDATE_VEHICLE = `${BACKEND_BASE_URL}/api/vehicles/update_vehicle`;
 export const UPDATE_VEHICLE_IMAGE = `${BACKEND_BASE_URL}/api/vehicles/update_image`;
 export const ALL_VEHICLE_COUNT = `${BACKEND_BASE_URL}/api/vehicles/vehicle-count`;
+export const UPDATE_VEHICLE_BASE_DISTANCE_URL = `${BACKEND_BASE_URL}/api/vehicles/update-base-distance`;
+export const UPDATE_VEHICLE_BASE_DISTANCE_PRICE_URL = `${BACKEND_BASE_URL}/api/vehicles/update-distance-unit-price`;
+export const UPDATE_VEHICLE_BASE_DISTANCE_OR_PRICE_PRICE_URL = `${BACKEND_BASE_URL}/api/vehicles/update-price-distance`;
+export const LIVE_SEARCH_VEHICLE_URL = `${BACKEND_BASE_URL}/api/vehicles/live-search`;
 
 // Trips
 export const NEW_ADMIN_TRIP = `${BACKEND_BASE_URL}/api/trip/new_admin_trips`;

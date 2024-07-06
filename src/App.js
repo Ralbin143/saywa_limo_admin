@@ -27,6 +27,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import PackagesPage from "./Pages/Packages/Packages";
 import AddPackagePage from "./Pages/Packages/AddPackagePage";
+import SettingsPage from "./Pages/Settings/SettingsPage";
 
 const loginstatus = sessionStorage.getItem("wsstfaarvav");
 // const tokenstatus = sessionStorage.getItem('ok')
@@ -85,6 +86,7 @@ function App() {
             <Route path="/packages" element={<PackagesPage />} />
             <Route path="/packages/add_package" element={<AddPackagePage />} />
             <Route path="/packages/:id" element={<AddPackagePage />} />
+            <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </main>
       </>

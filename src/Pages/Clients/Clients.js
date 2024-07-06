@@ -1,15 +1,21 @@
 import { TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Breadcrumbs, Button, FormControlLabel, Tooltip } from "@mui/material";
+import { Breadcrumbs, Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { Form } from "react-bootstrap";
-import DataTable from "react-data-table-component";
-import { ALL_CLIENTS, CLIENT_UPDATE, DELETE_USER } from "../../Const/ApiConst";
+import { DELETE_USER } from "../../Const/ApiConst";
 import { instance } from "../../Const/ApiHeader";
 import Modal from "react-bootstrap/Modal";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { Input, Table } from "antd";
+import { useDispatch } from "react-redux";
+import {
+  ALLCUSTOMERS,
+  DELETE_CUSTOMERS,
+  UPDATE_CUSTOMERS,
+} from "../../store/Customers/CustomerSlice";
+import { useSelector } from "react-redux";
 
 function Clients() {
   const validationSchema = yup.object({
@@ -29,14 +35,12 @@ function Clients() {
       .required("Email address is required"),
   });
   const [userData, setUserData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [totalRows, setTotalRows] = useState(0);
-  const [perPage, setPerPage] = useState(10);
   const [searchKey, setSearchKey] = useState("");
   const [userId, setUserId] = useState();
 
+  const { customers, isLoading } = useSelector((state) => state?.customer);
   const navigate = useNavigate();
-  const [editClint, setEditClint] = useState();
+  const dispatch = useDispatch();
 
   // HANDLE EDIT CLIENT
   const handleEditClient = (client) => {
@@ -58,67 +62,46 @@ function Clients() {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const contactnoAsNumber = parseInt(values.contactNo, 10);
-      instance
-        .post(CLIENT_UPDATE, {
-          ...values,
-          contactNo: contactnoAsNumber,
-          id: userId,
-        })
-        .then((response) => {
-          setUserData(response.data.data);
-          handleClose();
-        });
+      const data = {
+        ...values,
+        contactNo: contactnoAsNumber,
+        id: userId,
+      };
+
+      dispatch(UPDATE_CUSTOMERS(data));
+      handleClose();
     },
   });
-  const loadData = async (page) => {
-    setLoading(true);
-    const data = {
-      page: page,
-      per_page: perPage,
-      searchKey: searchKey,
-    };
-    instance
-      .post(ALL_CLIENTS, data)
-      .then((response) => {
-        setUserData(response.data.data);
-        setTotalRows(response.data.total);
-        setLoading(false);
-      })
-      .catch((err) => console.log(err));
-  };
-  const handlePageChange = (page) => {
-    loadData(page);
-  };
-  const handlePerRowsChange = async (newPerPage, page) => {
-    setLoading(true);
-    const data = {
-      page: page,
-      per_page: newPerPage,
-      searchKey: searchKey,
-    };
-    const response = await instance.post(ALL_CLIENTS, data);
-
-    setUserData(response.data.data);
-    setPerPage(newPerPage);
-    setLoading(false);
-  };
 
   const searchAction = async (e) => {
-    setLoading(true);
     setSearchKey(e.target.value);
+
     const data = {
+      page: e.current,
+      per_page: e.pageSize,
       searchKey: e.target.value,
     };
-    const response = await instance.post(ALL_CLIENTS, data);
-
-    setUserData(response.data.data);
-    setLoading(false);
+    dispatch(ALLCUSTOMERS(data));
   };
 
   useEffect(() => {
-    loadData(1); // fetch page 1 of users
+    const data = {
+      page: 1,
+      per_page: 10,
+      searchKey,
+    };
+    dispatch(ALLCUSTOMERS(data));
     // eslint-disable-next-line
   }, []);
+
+  const loadPaginationData = (e) => {
+    const data = {
+      page: e.current,
+      per_page: e.pageSize,
+      searchKey,
+    };
+    dispatch(ALLCUSTOMERS(data));
+  };
 
   // modelbox
   const [show, setShow] = useState(false);
@@ -126,47 +109,17 @@ function Clients() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const editClintData = (userId) => {
-    handleShow();
-    setEditClint(userId);
-  };
-
-  const columns = [
+  const newColumns = [
+    { title: "Name", dataIndex: "fullName" },
+    { title: "Email", dataIndex: "email" },
+    { title: "Contact No", dataIndex: "contact_no" },
     {
-      name: "Name",
-      selector: (row) => (
-        <Tooltip title={row.fullName}>
-          <span>{row.fullName}</span>
-        </Tooltip>
-      ),
-      sortable: true,
-    },
-    {
-      name: "Email",
-      selector: (row) => (
-        <Tooltip title={row.email}>
-          <span>{row.email}</span>
-        </Tooltip>
-      ),
-      sortable: true,
-    },
-
-    {
-      name: "Contact No",
-      selector: (row) => (
-        <Tooltip title={row.contact_no}>
-          <span>{row.contact_no}</span>
-        </Tooltip>
-      ),
-      sortable: true,
-    },
-    {
-      name: "Actions",
-      selector: (row) => (
-        <div style={{ display: "flex", gap: "10px" }}>
+      title: "Actions",
+      render: (row) => (
+        <div className="d-flex gap-2">
           <Button
             variant="contained"
-            size="sm"
+            size="small"
             onClick={() => navigate(`/view-client/${row.user_id}`)}
           >
             View
@@ -193,7 +146,6 @@ function Clients() {
           </Button>
         </div>
       ),
-      sortable: true,
     },
   ];
 
@@ -225,10 +177,8 @@ function Clients() {
               const data = {
                 id: deleteUserData._id,
               };
-              instance.post(DELETE_USER, data).then((result) => {
-                loadData(1);
-                setDeleteModalShow(false);
-              });
+              dispatch(DELETE_CUSTOMERS(data));
+              setDeleteModalShow(false);
             }}
             variant="contained"
             color="error"
@@ -252,34 +202,31 @@ function Clients() {
           Home
         </Link>
         <Link color="text.primary" className="breadcrumpItem">
-          Users
+          Clients
         </Link>
       </Breadcrumbs>
       <div className="d-flex justify-content-between align-items-center mt-4">
-        <strong>Users</strong>
-        {/* <div>
-          <Link to="/Add_User">
-            <Button variant="contained">Add User</Button>
-          </Link>
-        </div> */}
+        <strong>Clients</strong>
       </div>
       <div className="mb-2 mt-2 col-3">
-        <Form.Control
+        <Input.Search
           type="search"
           placeholder="Search Client..."
           onChange={(e) => searchAction(e)}
         />
       </div>
-      <DataTable
-        responsive={true}
-        columns={columns}
-        data={userData}
-        progressPending={loading}
-        pagination
-        paginationServer
-        paginationTotalRows={totalRows}
-        onChangeRowsPerPage={handlePerRowsChange}
-        onChangePage={handlePageChange}
+
+      <Table
+        loading={isLoading}
+        columns={newColumns}
+        dataSource={customers?.data}
+        pagination={{
+          defaultPageSize: 10,
+          showSizeChanger: true,
+          total: customers?.total,
+          pageSizeOptions: ["10", "20", "50", "100", "500"],
+        }}
+        onChange={(e) => loadPaginationData(e)}
       />
       <Modal
         centered

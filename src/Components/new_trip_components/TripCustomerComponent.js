@@ -46,7 +46,7 @@ function TripCustomerComponent() {
           placeholder="Search..."
           onChange={(e) => liveSearchAction(e.target.value)}
         />
-        <div style={{overflow:"auto"}}>
+        <div style={{ overflow: "auto" }}>
           <table className="table table-responsive">
             <thead>
               <tr>
@@ -65,7 +65,7 @@ function TripCustomerComponent() {
                   </td>
                 </tr>
               ) : (
-                customers.map((res, i) => (
+                customers.data.map((res, i) => (
                   <tr key={i}>
                     <td>
                       <small>{i + 1}</small>
