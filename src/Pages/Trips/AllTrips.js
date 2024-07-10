@@ -1,8 +1,7 @@
-import { Autocomplete, Breadcrumbs, Paper, TextField } from "@mui/material";
-import axios from "axios";
+import { Breadcrumbs, Paper, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import { imageInstance, instance } from "../../Const/ApiHeader";
+import { instance } from "../../Const/ApiHeader";
 import {
   ALL_CLIENTS,
   GETUSERS,
@@ -32,7 +31,6 @@ function AllTrips() {
   const [customerList, setCustomerList] = useState([]);
   const [vehicleList, setVehicleList] = useState([]);
   const [driverList, setDriverList] = useState([]);
-  const [tripType, setTripType] = useState("Oneway Trip");
 
   const [SelectedCusid, setSelectedCusid] = useState("");
 

@@ -65,7 +65,7 @@ function TripCustomerComponent() {
                   </td>
                 </tr>
               ) : (
-                customers.data.map((res, i) => (
+                customers?.data?.map((res, i) => (
                   <tr key={i}>
                     <td>
                       <small>{i + 1}</small>
