@@ -49,6 +49,16 @@ export const GET_SINGLE_PACKAGE_SLICE_ITEM = createAsyncThunk(
   }
 );
 
+export const LIVE_SEARCH_PACKAGE_SLICE_ITEM = createAsyncThunk(
+  "search-package",
+  async (data, thunkApi) => {
+    try {
+      return await packageService.liveSearchPackage(data);
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
 export const packageSlice = createSlice({
   name: "packages",
   initialState,
@@ -118,6 +128,22 @@ export const packageSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.singlePackageItem = action.payload;
+      })
+      .addCase(LIVE_SEARCH_PACKAGE_SLICE_ITEM.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+      })
+      .addCase(LIVE_SEARCH_PACKAGE_SLICE_ITEM.rejected, (state) => {
+        state.isLoading = true;
+        state.isError = true;
+        state.isSuccess = false;
+      })
+      .addCase(LIVE_SEARCH_PACKAGE_SLICE_ITEM.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.packageList = action.payload;
       });
   },
 });

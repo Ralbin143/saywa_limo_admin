@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   ALL_PACKAGE_SLICE_ITEM,
+  LIVE_SEARCH_PACKAGE_SLICE_ITEM,
   TOGGLE_PACKAGE_STATUS_SLICE_ITEM,
 } from "../../store/Packages/PackageSlice";
 import { useSelector } from "react-redux";
@@ -74,11 +75,21 @@ function PackagesPage() {
       ),
     },
   ];
+
+  const searchPackage = (e) => {
+    const data = {
+      searchkey: e,
+    };
+    dispatch(LIVE_SEARCH_PACKAGE_SLICE_ITEM(data));
+  };
   return (
     <div>
       <div className="d-flex justify-content-between gap-2 mb-4">
         <div>
-          <Input.Search placeholder="Search..." />
+          <Input.Search
+            placeholder="Search..."
+            onChange={(e) => searchPackage(e.target.value)}
+          />
         </div>
         <Button onClick={() => navigate("add_package")}>Add Package</Button>
       </div>

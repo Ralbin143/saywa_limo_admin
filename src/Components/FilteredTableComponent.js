@@ -508,6 +508,13 @@ function FilteredTableComponent(params) {
                   <Badge bg="info"> Online Trip</Badge>
                 )}
               </div>
+
+              <div className="mx-2">
+                {res?.rideType
+                  .split("-")
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(" ")}
+              </div>
             </div>
           </div>
 
@@ -633,18 +640,18 @@ function FilteredTableComponent(params) {
         </div>
       ))}
 
-      {tripDataArray.length > 10 && (
-        <div className="text-center mt-4">
-          <LoadingButton
-            onClick={() => {
-              loadDataNew(perPageCount + 10);
-              setPerPageCount(perPageCount + 10);
-            }}
-          >
-            Load More
-          </LoadingButton>
-        </div>
-      )}
+      {/* {tripDataArray.length < 10 && ( */}
+      <div className="text-center mt-4">
+        <LoadingButton
+          onClick={() => {
+            loadDataNew(perPageCount + 10);
+            setPerPageCount(perPageCount + 10);
+          }}
+        >
+          Load More
+        </LoadingButton>
+      </div>
+      {/* )} */}
     </div>
 
     // <Table>

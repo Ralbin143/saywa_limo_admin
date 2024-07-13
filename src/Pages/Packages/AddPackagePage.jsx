@@ -35,7 +35,20 @@ function AddPackagePage() {
 
   const handlePriceChange = (e, vehicleId) => {
     const price = e.target.value;
-    setVehiclePrices({ ...vehiclePrices, [vehicleId]: price });
+    setVehiclePrices((prevPrices) => ({ ...prevPrices, [vehicleId]: price }));
+
+    setVehicles((prevVehicles) => {
+      const vehicleIndex = prevVehicles.findIndex(
+        (vehicle) => vehicle.id === vehicleId
+      );
+      if (vehicleIndex !== -1) {
+        const updatedVehicles = prevVehicles.map((vehicle) =>
+          vehicle.id === vehicleId ? { ...vehicle, price } : vehicle
+        );
+        return updatedVehicles;
+      }
+      return prevVehicles;
+    });
   };
 
   const handleChangeVehicle = (e, vehicle) => {
@@ -104,12 +117,13 @@ function AddPackagePage() {
     for (let i = 0; i < imges.length; i++) {
       formData.append("images", imges[i]);
     }
+    formData.append("id", id ? id : null);
     formData.append("PackageName", PackageName);
     formData.append("TourLength", TourLength);
     formData.append("TotalPerson", TotalPerson);
     formData.append("selectedStatus", selectedStatus);
     formData.append("Description", Description);
-    formData.append("eventType", eventType);
+    formData.append("eventType", JSON.stringify(eventType));
     formData.append("vehicles", JSON.stringify(vehicles));
     formData.append("vehiclePrices", JSON.stringify(vehiclePrices));
 
@@ -324,12 +338,16 @@ function AddPackagePage() {
                     objectFit: "contain",
                   }}
                 />
+                <div className="text-center">
+                  {vehicles.find((vehicle) => vehicle.id === res._id)?.price ||
+                    ""}
+                </div>
                 <div className="mt-2">
                   <Input
                     type="number"
                     placeholder="Price"
-                    value={vehiclePrices[res._id] || ""}
-                    onChange={(e) => handlePriceChange(e, res._id)}
+                    // value="SSSS"
+                    onChange={(e) => handlePriceChange(e, res._id, res)}
                   />
                 </div>
               </Checkbox>
@@ -340,7 +358,7 @@ function AddPackagePage() {
 
       <div className="text-center mt-4">
         <Button style={{ width: "200px" }} onClick={saveNewPackage}>
-          Save
+          {id ? "Update" : "Save"}
         </Button>
       </div>
     </div>

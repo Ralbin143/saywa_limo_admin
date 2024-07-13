@@ -21,11 +21,17 @@ const getSinglePackage = async (data) => {
   return response.data;
 };
 
+const liveSearchPackage = async (data) => {
+  const response = await instance.post(`${PACKAGES_URL}/live-search`, data);
+  return response.data;
+};
+
 const packageService = {
   getAllPackages,
   newPackages,
   toggleStatus,
   getSinglePackage,
+  liveSearchPackage,
 };
 
 export default packageService;

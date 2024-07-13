@@ -7,7 +7,7 @@ import DraggableWaypoints from "./DraggableWaypoints";
 import { wayPoints } from "../../store/WaypointSlice.js";
 import { useSelector } from "react-redux";
 import moment from "moment/moment";
-import { DatePicker } from "antd";
+import { DatePicker, Input } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { toast, ToastContainer } from "react-toastify";
@@ -149,6 +149,9 @@ function BookingForm() {
   const [toastMessage, setToastMessage] = useState("");
   const [fromLocation, setFromLocation] = useState("");
   const [dropLocation, setDropLocation] = useState("");
+  const [returnTrip, setReturnTrip] = useState("No");
+  const [returnDate, setReturnDate] = useState("");
+  const [returnTime, setReturnTime] = useState("");
   // ----------------------------------[Refs]----------------------------------
   const originRef = useRef();
   const hourlyOriginRef = useRef();
@@ -327,7 +330,11 @@ function BookingForm() {
     }
 
     const data = {
-      rideType: oneWayTrip ? "oneway-trip" : "hourly-trip",
+      rideType: oneWayTrip
+        ? returnTrip === "Yes"
+          ? "round-trip"
+          : "oneway-trip"
+        : "hourly-trip",
       source: originRef.current.value,
       destination: destinationRef.current.value,
       routeNo: 0,
@@ -336,6 +343,8 @@ function BookingForm() {
       hour: hours,
       travelTime: duration,
       travelLength: distance,
+      returnDate,
+      returnTime,
     };
 
     dispatch(location(data));
@@ -544,6 +553,21 @@ function BookingForm() {
           >
             Hourly
           </div>
+
+          <div
+            className="bookingSelectorParent p-3"
+            style={{
+              textAlign: "center",
+              // width: "200px",
+              cursor: "pointer",
+              color: "white",
+              fontWeight: "900",
+              background: "black",
+            }}
+            onClick={() => Navigate("/packages")}
+          >
+            Packages
+          </div>
         </div>
         <div className="w-100">
           {oneWayTrip ? (
@@ -579,6 +603,74 @@ function BookingForm() {
                 </select>
                 <div className="text-danger">{pickupTimeError}</div>
               </div>
+
+              <div className="d-flex flex-column w-100 pkp-container mt-2">
+                <small>Return Trip</small>
+                <div className="d-flex mt-2">
+                  <div
+                    style={{
+                      cursor: "pointer",
+                      textAlign: "center",
+                      background: returnTrip === "Yes" ? "white" : "#1e1e1e",
+                      color: returnTrip === "Yes" ? "#1e1e1e" : "white",
+                      border: "1px solid white",
+                      width: "100%",
+                      borderRadius: "5px 0 0 5px",
+                      padding: "5px",
+                    }}
+                    onClick={() => setReturnTrip("Yes")}
+                  >
+                    Yes
+                  </div>
+                  <div
+                    style={{
+                      cursor: "pointer",
+                      textAlign: "center",
+                      background: returnTrip === "No" ? "white" : "#1e1e1e",
+                      color: returnTrip === "No" ? "#1e1e1e" : "white",
+                      border: "1px solid white",
+                      width: "100%",
+                      borderRadius: "0 5px 5px 0",
+                      padding: "5px",
+                    }}
+                    onClick={() => setReturnTrip("No")}
+                  >
+                    No
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="d-flex flex-column align-items-center roundTripContainer"
+                style={{
+                  overflow: "auto",
+                  height: returnTrip === "No" ? "0" : "250px",
+                }}
+              >
+                <div className="d-flex flex-column w-100 pkp-container">
+                  <small>Return Date & Time</small>
+                  <Input
+                    type="date"
+                    onChange={(e) => setReturnDate(e.target.value)}
+                  />
+                  <div className="d-flex flex-column ">
+                    <small>Pickup Time</small>
+                    <select
+                      className="form-select"
+                      value={pickupTime}
+                      onChange={(e) => setReturnTime(e.target.value)}
+                    >
+                      {timings.map((res, i) => (
+                        <option value={res} key={i}>
+                          {res}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="text-danger">{pickupTimeError}</div>
+                  </div>
+                </div>
+              </div>
+
               <div
                 className="text-center mt-3 reserveButtonHome"
                 onClick={() => reserveAction()}
