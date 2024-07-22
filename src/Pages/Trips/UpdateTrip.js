@@ -280,7 +280,6 @@ function UpdateTrip() {
           Trip # {sourceData[0]?.tripNo}
         </Link>
       </Breadcrumbs>
-
       {sourceData?.map((res, i) => {
         return (
           <div key={i}>
@@ -417,12 +416,26 @@ function UpdateTrip() {
                 </select> */}
               </div>
             </div>
-
+            <div className="row mt-3">
+              <div className="col-12 col-md-6 row">
+                <div className="col-5">Meet and greet</div>
+                <div className="col-7">
+                  {/* <strong>: {res?.shortDescription}</strong> */}
+                  <strong>: {sourceData[0]?.meetAndGreet}</strong>
+                </div>
+              </div>
+              <div className="col-12 col-md-6 row">
+                <div className="col-5">Car Seat</div>
+                <div className="col-7">
+                  {/* <strong>: {res?.shortDescription}</strong> */}
+                  <strong>: {sourceData[0]?.customerdata[0].fullName}</strong>
+                </div>
+              </div>
+            </div>
             <div className="row mt-3">
               <div className="col-12 col-md-6 row">
                 <div className="col-5">Customer Info</div>
                 <div className="col-7">
-                  {/* <strong>: {res?.shortDescription}</strong> */}
                   <strong>: {sourceData[0]?.customerdata[0].fullName}</strong>
                   <br></br>
                   <strong className="ms-1">
@@ -432,6 +445,12 @@ function UpdateTrip() {
                   <strong className="ms-1">
                     {sourceData[0]?.customerdata[0].contact_no}
                   </strong>
+                </div>
+              </div>
+              <div className="col-12 col-md-6 row">
+                <div className="col-5">Customer Remarks Seat</div>
+                <div className="col-7">
+                  <strong>: {sourceData[0]?.shortDescription}</strong>
                 </div>
               </div>
             </div>
@@ -520,7 +539,6 @@ function UpdateTrip() {
           </div>
         );
       })}
-
       <Modal
         open={openDeleteDialog}
         onClose={() => {
@@ -647,7 +665,8 @@ function UpdateTrip() {
                 Reject
               </Button>
             ) : null}
-            {modalData[0]?.customerdata[0]?.documentStatus === "Rejected" ? (
+            {modalData[0]?.customerdata[0]?.documentStatus === "Rejected" ||
+            modalData[0]?.customerdata[0]?.documentStatus === "" ? (
               <Button
                 variant="contained"
                 color="success"

@@ -19,6 +19,397 @@ import { LoadingButton } from "@mui/lab";
 
 function FilteredTableComponent(params) {
   const [perPageCount, setPerPageCount] = useState(10);
+
+  const checkNight = (value) => {
+    switch (value) {
+      case "12:00 AM":
+        return "Night";
+
+        break;
+      case "12:15 AM":
+        return "Night";
+
+        break;
+      case "12:30 AM":
+        return "Night";
+
+        break;
+      case "12:45 AM":
+        return "Night";
+
+        break;
+      case "1:00 AM":
+        return "Night";
+
+        break;
+      case "1:15 AM":
+        return "Night";
+
+        break;
+      case "1:30 AM":
+        return "Night";
+
+        break;
+      case "1:45 AM":
+        return "Night";
+
+        break;
+      case "2:00 AM":
+        return "Night";
+
+        break;
+      case "2:15 AM":
+        return "Night";
+
+        break;
+      case "2:30 AM":
+        return "Night";
+
+        break;
+      case "2:45 AM":
+        return "Night";
+
+        break;
+      case "3:00 AM":
+        return "Night";
+
+        break;
+      case "3:15 AM":
+        return "Night";
+
+        break;
+      case "3:30 AM":
+        return "Night";
+
+        break;
+      case "3:45 AM":
+        return "Night";
+
+        break;
+      case "4:00 AM":
+        return "Night";
+
+        break;
+      case "4:15 AM":
+        return "Night";
+
+        break;
+      case "4:30 AM":
+        return "Night";
+
+        break;
+      case "4:45 AM":
+        return "Night";
+
+        break;
+      case "5:00 AM":
+        return "Night";
+
+        break;
+      case "5:15 AM":
+        return "Night";
+
+        break;
+      case "5:30 AM":
+        return "Night";
+
+        break;
+      case "5:45 AM":
+        return "Night";
+
+        break;
+      case "6:00 AM":
+        return "Night";
+
+        break;
+      case "6:15 AM":
+        return "Night";
+
+        break;
+      case "6:30 AM":
+        return "Night";
+
+        break;
+      case "6:45 AM":
+        return "Night";
+
+        break;
+      case "7:00 AM":
+        return "Day";
+
+        break;
+      case "7:15 AM":
+        return "Day";
+
+        break;
+      case "7:30 AM":
+        return "Day";
+
+        break;
+      case "7:45 AM":
+        return "Day";
+
+        break;
+      case "8:00 AM":
+        return "Day";
+
+        break;
+      case "8:15 AM":
+        return "Day";
+
+        break;
+      case "8:30 AM":
+        return "Day";
+
+        break;
+      case "8:45 AM":
+        return "Day";
+
+        break;
+      case "9:00 AM":
+        return "Day";
+
+        break;
+      case "9:15 AM":
+        return "Day";
+
+        break;
+      case "9:30 AM":
+        return "Day";
+
+        break;
+      case "9:45 AM":
+        return "Day";
+
+        break;
+      case "10:00 AM":
+        return "Day";
+
+        break;
+      case "10:15 AM":
+        return "Day";
+
+        break;
+      case "10:30 AM":
+        return "Day";
+
+        break;
+      case "10:45 AM":
+        return "Day";
+
+        break;
+      case "11:00 AM":
+        return "Day";
+
+        break;
+      case "11:15 AM":
+        return "Day";
+
+        break;
+      case "11:30 AM":
+        return "Day";
+
+        break;
+      case "11:45 AM":
+        return "Day";
+
+        break;
+      case "12:00 PM":
+        return "Day";
+
+        break;
+      case "12:15 PM":
+        return "Day";
+
+        break;
+      case "12:30 PM":
+        return "Day";
+
+        break;
+      case "12:45 PM":
+        return "Day";
+
+        break;
+      case "01:00 PM":
+        return "Day";
+
+        break;
+      case "01:15 PM":
+        return "Day";
+
+        break;
+      case "01:30 PM":
+        return "Day";
+
+        break;
+      case "01:45 PM":
+        return "Day";
+
+        break;
+      case "02:00 PM":
+        return "Day";
+
+        break;
+      case "02:15 PM":
+        return "Day";
+
+        break;
+      case "02:30 PM":
+        return "Day";
+
+        break;
+      case "02:45 PM":
+        return "Day";
+
+        break;
+      case "03:00 PM":
+        return "Day";
+
+        break;
+      case "03:15 PM":
+        return "Day";
+
+        break;
+      case "03:30 PM":
+        return "Day";
+
+        break;
+      case "03:45 PM":
+        return "Day";
+
+        break;
+      case "04:00 PM":
+        return "Day";
+
+        break;
+      case "04:15 PM":
+        return "Day";
+
+        break;
+      case "04:30 PM":
+        return "Day";
+
+        break;
+      case "04:45 PM":
+        return "Day";
+
+        break;
+      case "05:00 PM":
+        return "Day";
+
+        break;
+      case "05:15 PM":
+        return "Day";
+
+        break;
+      case "05:30 PM":
+        return "Day";
+
+        break;
+      case "05:45 PM":
+        return "Day";
+
+        break;
+      case "06:00 PM":
+        return "Day";
+
+        break;
+      case "06:15 PM":
+        return "Day";
+
+        break;
+      case "06:30 PM":
+        return "Day";
+
+        break;
+      case "06:45 PM":
+        return "Day";
+
+        break;
+      case "07:00 PM":
+        return "Day";
+
+        break;
+      case "07:15 PM":
+        return "Day";
+
+        break;
+      case "07:30 PM":
+        return "Day";
+
+        break;
+      case "07:45 PM":
+        return "Day";
+
+        break;
+      case "08:00 PM":
+        return "Day";
+
+        break;
+      case "08:15 PM":
+        return "Day";
+
+        break;
+      case "08:30 PM":
+        return "Day";
+
+        break;
+      case "08:45 PM":
+        return "Day";
+
+        break;
+      case "09:00 PM":
+        return "Day";
+
+        break;
+      case "09:15 PM":
+        return "Day";
+
+        break;
+      case "09:30 PM":
+        return "Day";
+
+        break;
+      case "09:45 PM":
+        return "Day";
+
+        break;
+      case "10:00 PM":
+        return "Night";
+
+        break;
+      case "10:15 PM":
+        return "Night";
+
+        break;
+      case "10:30 PM":
+        return "Night";
+
+        break;
+      case "10:45 PM":
+        return "Night";
+
+        break;
+      case "11:00 PM":
+        return "Night";
+
+        break;
+      case "11:15 PM":
+        return "Night";
+
+        break;
+      case "11:30 PM":
+        return "Night";
+
+        break;
+      case "11:45 PM":
+        return "Night";
+
+        break;
+      default:
+        break;
+    }
+  };
   const columns = [
     {
       name: "Trip #",
@@ -422,6 +813,7 @@ function FilteredTableComponent(params) {
         pauseOnHover
         theme="dark"
       />
+
       <div className="col-4">
         {" "}
         <Form.Control
@@ -493,8 +885,12 @@ function FilteredTableComponent(params) {
                 </small>
               )}
             </div>
+
             <div className="d-flex justify-content-between align-items-center">
               <div className="d-flex gap-2 flex-wrap">
+                {checkNight(res.scheduledTime) === "Night" && (
+                  <Badge bg="info"> Prime Time</Badge>
+                )}
                 {res.discount === 0 ||
                 res.discount === "0" ||
                 res.discount === null ||
@@ -517,7 +913,6 @@ function FilteredTableComponent(params) {
               </div>
             </div>
           </div>
-
           <div className="mt-3 row">
             <div className="col-12 col-md-4">
               <div>
@@ -580,9 +975,13 @@ function FilteredTableComponent(params) {
             </div>
           </div>
           <hr />
-          {res?.driverId ? (
+
+          {res?.driver !== undefined ? (
             <div>
-              <div>Driver :</div>
+              <div>
+                Driver :{" "}
+                {`${res?.driver[0]?.firstName} ${res?.driver[0]?.lastName}`}
+              </div>
               <hr />
             </div>
           ) : null}
@@ -635,11 +1034,9 @@ function FilteredTableComponent(params) {
               </Button>
             )}
           </div>
-
           <div></div>
         </div>
       ))}
-
       {/* {tripDataArray.length < 10 && ( */}
       <div className="text-center mt-4">
         <LoadingButton
