@@ -955,7 +955,7 @@ function FilteredTableComponent(params) {
               <span className="d-flex flex-column">
                 <small style={{ cursor: "alias" }}>{res.source}</small>
                 <small>
-                  {res.stops.length !== 0 ? res.stops.length + " Stops" : ""}
+                  {res.stops[0] !== "[]" ? res.stops.length + " Stops" : ""}
                 </small>
                 <small style={{ cursor: "alias" }}>{res.destination}</small>
               </span>

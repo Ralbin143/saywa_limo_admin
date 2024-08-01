@@ -427,8 +427,9 @@ function UpdateTrip() {
               <div className="col-12 col-md-6 row">
                 <div className="col-5">Car Seat</div>
                 <div className="col-7">
+                  {console.log(sourceData[0])}
                   {/* <strong>: {res?.shortDescription}</strong> */}
-                  <strong>: {sourceData[0]?.customerdata[0].fullName}</strong>
+                  {/* <strong>: {sourceData[0]?.seatCount[0]}</strong> */}
                 </div>
               </div>
             </div>

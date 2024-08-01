@@ -94,7 +94,7 @@ function Sidebar() {
         </div>
         <div className="d-flex gap-2">
           <div className="topbar-icon-container">
-            <IconButton
+            {/* <IconButton
               onClick={handle_click_notification_menu}
               size="small"
               sx={{ ml: 2 }}
@@ -107,7 +107,7 @@ function Sidebar() {
               <Badge badgeContent={notificationCount} color="warning">
                 <NotificationsNoneIcon className="topbar-icon" />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <Menu
               anchorEl={anchorElNotification}
               id="account-menu"
