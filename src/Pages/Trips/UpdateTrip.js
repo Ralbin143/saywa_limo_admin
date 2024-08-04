@@ -255,7 +255,6 @@ function UpdateTrip() {
       pdf.save("Agreement.pdf");
     });
   };
-  console.log("SourceData", sourceData[0]?.customerdata[0]);
 
   return (
     <>
@@ -427,7 +426,15 @@ function UpdateTrip() {
               <div className="col-12 col-md-6 row">
                 <div className="col-5">Car Seat</div>
                 <div className="col-7">
-                  {console.log(sourceData[0])}
+                  <div></div>
+                  <ul style={{ listStyleType: "circle" }}>
+                    {sourceData[0]?.seatCount.map((resxxx, ixxx) => (
+                      <li key={ixxx} className="d-flex justify-content-between">
+                        <div>{resxxx.type}</div>
+                        <div>{resxxx.count}</div>
+                      </li>
+                    ))}
+                  </ul>
                   {/* <strong>: {res?.shortDescription}</strong> */}
                   {/* <strong>: {sourceData[0]?.seatCount[0]}</strong> */}
                 </div>
@@ -449,9 +456,21 @@ function UpdateTrip() {
                 </div>
               </div>
               <div className="col-12 col-md-6 row">
-                <div className="col-5">Customer Remarks Seat</div>
+                <div className="col-5">Customer Remarks</div>
                 <div className="col-7">
                   <strong>: {sourceData[0]?.shortDescription}</strong>
+                </div>
+              </div>
+              <div className="col-12 col-md-6 row">
+                <div className="col-5">Need Wheel Chair</div>
+                <div className="col-7">
+                  <strong>: {sourceData[0]?.wheelChair}</strong>
+                </div>
+              </div>
+              <div className="col-12 col-md-6 row">
+                <div className="col-5">Flight Info</div>
+                <div className="col-7">
+                  <strong>: {sourceData[0]?.flightInformation}</strong>
                 </div>
               </div>
             </div>
